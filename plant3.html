@@ -1,8 +1,10 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <title>eFlora - Plant 3</title>
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false&callback=myMap"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+ 
 </head>
 <body>
 <h1>Plant 3</h1> 
@@ -13,21 +15,84 @@
 
 <br> <br> <br>
 
-<iframe
-  width="600"
-  height="450"
-  style="border:0"
-  loading="lazy"
-  allowfullscreen
-  referrerpolicy="no-referrer-when-downgrade"
-  src="https://www.google.com/maps/embed/v1/place?key=API_KEY
-    &q=Space+Needle,Seattle+WA">
+<iframe width="600" height="450" style="border:0" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" 
+  src="https://www.google.com/maps/embed/v1/place?key=API_KEY&q=Space+Needle,Seattle+WA">
 </iframe>
 
 <br> <br> <br>
 
 <a href="index.html">Home</a> <br>
 
+https://pesumpayirgal.github.io/casuarinaequisetifolia.html
+
+<main>
+
+        <div class="qr-container">
+            <div class="container">
+                <div class="qr-row">
+                        <div class="qr-card">
+                          <div id="qrcode"></div>
+                        </div>
+                    <div class="qr-content">
+                        <h1 class="qr-title">Scan QR Code</h1>
+                        <p class="qr-description">Scan the QR code to view this website on your mobile device.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+ </main>
+	
+    <script>
+        // get the content file name
+        const fileName = window.location.pathname.split('/').pop();
+        const replacedFileName = fileName.replace(/\.html$/, '.json');
+        
+        // get the content
+        fetch(replacedFileName)
+            .then(response => response.json())
+            .then(variables => {
+                document.getElementById('pageTitle').innerText = variables.title;
+    
+                const contentContainer = document.getElementById('contentContainer');
+                variables.content.forEach(content => {
+                    const title = document.createElement('h2');
+                    title.innerText = content.title;
+                    contentContainer.appendChild(title);
+    
+                    const description = document.createElement('p');
+                    description.innerText = content.description;
+                    contentContainer.appendChild(description);
+                });
+    
+                const imageContainer = document.getElementById('imageContainer');
+                variables.images.forEach(imageData => {
+                    const imageCard = document.createElement('div');
+                    imageCard.classList.add('imageCard');
+    
+                    const img = document.createElement('img');
+                    img.src = imageData.url;
+                    img.alt = imageData.title;
+    
+                    const imageTitle = document.createElement('h3');
+                    imageTitle.innerText = imageData.title;
+    
+                    const imageDescription = document.createElement('p');
+                    imageDescription.innerText = imageData.description;
+    
+                    imageCard.appendChild(img);
+                    imageCard.appendChild(imageTitle);
+                    imageCard.appendChild(imageDescription);
+    
+                    imageContainer.appendChild(imageCard);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching the variables:', error);
+            });
+    
+        // Generate QR code for the current page URL
+        var qrcode = new QRCode("qrcode", window.location.href);
+    </script>
 
 </body>
 </html>
